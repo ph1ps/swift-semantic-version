@@ -7,9 +7,9 @@ let package = Package(
     .library(name: "SemanticVersion", targets: ["SemanticVersion"]),
   ],
   traits: [
-    "Foundation",
-    "StringProcessing",
-    .default(enabledTraits: ["Foundation"]),
+    "FoundationInit",
+    "StringProcessingInit",
+    .default(enabledTraits: ["FoundationInit"]),
   ],
   targets: [
     .target(

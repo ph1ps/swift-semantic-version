@@ -91,7 +91,7 @@ public struct SemanticVersion: Sendable, Comparable, Encodable {
   }
 }
 
-#if Foundation
+#if FoundationInit
 import Foundation
 
 let foundationRegex = try? NSRegularExpression(pattern: #"^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"#)
@@ -125,7 +125,7 @@ extension SemanticVersion {
 }
 #endif
 
-#if StringProcessing
+#if StringProcessingInit
 @available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
 nonisolated(unsafe) let stringProcessingRegex = /^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
 
@@ -154,22 +154,12 @@ extension SemanticVersion {
 }
 #endif
 
-#if Foundation
-extension SemanticVersion {
+#if FoundationInit
+extension SemanticVersion: Decodable {
   public init?(_ string: String) {
     self.init(foundation: string)
   }
-}
-#elseif StringProcessing
-extension SemanticVersion {
-  public init?(_ string: String) {
-    self.init(stringProcessing: string)
-  }
-}
-#endif
-
-#if Foundation || StringProcessing
-extension SemanticVersion: Decodable {
+  
   public init(from decoder: any Decoder) throws {
     let container = try decoder.singleValueContainer()
     let string = try container.decode(String.self)
@@ -180,6 +170,25 @@ extension SemanticVersion: Decodable {
     }
   }
 }
+#elseif StringProcessingInit
+@available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
+extension SemanticVersion: Decodable {
+  
+  public init?(_ string: String) {
+    self.init(stringProcessing: string)
+  }
+  
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    let string = try container.decode(String.self)
+    if let version = SemanticVersion(string) {
+      self = version
+    } else {
+      throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid semantic version: \(string)")
+    }
+  }
+}
+#endif
 
 struct SubstringSplitSequence: Sequence {
   
@@ -211,4 +220,3 @@ struct SubstringSplitSequence: Sequence {
     }
   }
 }
-#endif
