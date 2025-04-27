@@ -63,10 +63,10 @@ import SemanticVersionMacro
 
 This library uses Swift 6.1’s **package traits** feature to offer two selectable parsing backends:
 
-- **FoundationInit** (default):  
+- `FoundationInit` (default):  
   Uses Foundation's `NSRegularExpression` for parsing.
 
-- **StringProcessingInit**:  
+- `StringProcessingInit`:  
   Uses Swift's native `Regex` literals for parsing.
 
 By default, `FoundationInit` is enabled.
@@ -85,8 +85,8 @@ To configure which parsing backend is used, specify traits in your `Package.swif
 
 #### Choosing the Parsing Backend
 
-- **FoundationInit** provides faster parsing performance but increases binary size due to linking Foundation, and is recommended for Darwin platforms (macOS, iOS).
-- **StringProcessingInit** keeps binaries smaller by avoiding Foundation and enables pure Swift parsing, making it preferred for portable deployments with stricter binary size constraints (e.g., Linux `musl`, Android).
+- `FoundationInit` provides faster parsing performance but increases binary size due to linking Foundation, and is recommended for Darwin platforms (macOS, iOS).
+- `StringProcessingInit` keeps binaries smaller by avoiding Foundation and enables pure Swift parsing, making it preferred for portable deployments with stricter binary size constraints (e.g., Linux `musl`, Android).
 
 ## Benchmarks
 
