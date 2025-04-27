@@ -1,6 +1,19 @@
-public struct SemanticVersion: Sendable, Comparable, Encodable {
+/// A structure representing a [Semantic Versioning 2.0.0](https://semver.org/) version number.
+///
+/// # Overview
+///
+/// `SemanticVersion` models a version consisting of several components:
+///
+/// - **Major version**: An unsigned integer, such as `1` in `1.2.3`.
+/// - **Minor version**: An unsigned integer, such as `2` in `1.2.3`.
+/// - **Patch version**: An unsigned integer, such as `3` in `1.2.3`.
+/// - **Prerelease identifiers**: An optional array of strings representing the prerelease information.
+/// - **Build metadata**: An optional string representing the build information.
+///
+/// Parsing, comparison, and validation are fully compliant with the [Semantic Versioning 2.0.0](https://semver.org/) specification.
+public struct SemanticVersion: Sendable, Equatable, Comparable, Hashable, Encodable {
   
-  enum Prerelease: Sendable, Equatable {
+  public enum _Prerelease: Sendable, Equatable, Hashable {
     case alphanumeric(Substring)
     case numeric(UInt)
     
@@ -14,21 +27,43 @@ public struct SemanticVersion: Sendable, Comparable, Encodable {
     }
   }
   
+  /// The major version component.
+  ///
+  /// Example: In `1.2.3`, the major version is `1`.
   public let major: UInt
-  public let minor: UInt
-  public let patch: UInt
-  let _prerelease: [Prerelease]
-  let _build: Substring?
   
+  /// The minor version component.
+  ///
+  /// Example: In `1.2.3`, the minor version is `2`.
+  public let minor: UInt
+  
+  /// The patch version component.
+  ///
+  /// Example: In `1.2.3`, the patch version is `3`.
+  public let patch: UInt
+  
+  public let _prerelease: [_Prerelease]
+  public let _build: Substring?
+  
+  /// The prerelease identifiers for the version, if any.
+  ///
+  /// Examples:
+  /// - For `1.2.3-alpha.1`, `prerelease` is `["alpha", "1"]`.
+  /// - For `1.2.3`, `prerelease` is an empty array.
   public var prerelease: [String] {
     _prerelease.map { $0.description }
   }
   
+  /// The build metadata for the version, if any.
+  ///
+  /// Examples:
+  /// - For `1.2.3+build.5`, `build` is `"build.5"`.
+  /// - For `1.2.3`, `build` is `nil`.
   public var build: String? {
     _build.map { String($0) }
   }
   
-  init(major: UInt, minor: UInt, patch: UInt, prerelease: [Prerelease], build: Substring?) {
+  init(major: UInt, minor: UInt, patch: UInt, prerelease: [_Prerelease], build: Substring?) {
     self.major = major
     self.minor = minor
     self.patch = patch
@@ -36,6 +71,15 @@ public struct SemanticVersion: Sendable, Comparable, Encodable {
     self._build = build
   }
   
+  /// A string representation of the complete semantic version.
+  ///
+  /// The format includes major, minor, and patch versions, and may include
+  /// prerelease identifiers and build metadata if present.
+  ///
+  /// Examples:
+  /// - `"1.2.3"`
+  /// - `"1.2.3-alpha.1"`
+  /// - `"1.2.3+build.5"`
   public var description: String {
     var description = "\(major).\(minor).\(patch)"
     if !_prerelease.isEmpty {
@@ -50,6 +94,14 @@ public struct SemanticVersion: Sendable, Comparable, Encodable {
   public func encode(to encoder: any Encoder) throws {
     var container = encoder.singleValueContainer()
     try container.encode(description)
+  }
+  
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(major)
+    hasher.combine(minor)
+    hasher.combine(patch)
+    hasher.combine(_prerelease)
+    hasher.combine(_build)
   }
   
   public static func ==(lhs: SemanticVersion, rhs: SemanticVersion) -> Bool {
@@ -89,6 +141,10 @@ public struct SemanticVersion: Sendable, Comparable, Encodable {
     
     return lhs._prerelease.count < rhs._prerelease.count
   }
+  
+  public static func _unchecked(major: UInt, minor: UInt, patch: UInt, prerelease: [_Prerelease], build: Substring?) -> SemanticVersion {
+    self.init(major: major, minor: minor, patch: patch, prerelease: prerelease, build: build)
+  }
 }
 
 #if FoundationInit
@@ -113,9 +169,9 @@ extension SemanticVersion {
     let prerelease = Range(match.range(at: 4), in: string).map {
       SubstringSplitSequence(base: string[$0]).map {
         if let number = UInt($0) {
-          return Prerelease.numeric(number)
+          return _Prerelease.numeric(number)
         } else {
-          return Prerelease.alphanumeric($0)
+          return _Prerelease.alphanumeric($0)
         }
       }
     }
@@ -143,9 +199,9 @@ extension SemanticVersion {
     let prerelease = match.output.prerelease.map {
       SubstringSplitSequence(base: $0).map {
         if let number = UInt($0) {
-          return Prerelease.numeric(number)
+          return _Prerelease.numeric(number)
         } else {
-          return Prerelease.alphanumeric($0)
+          return _Prerelease.alphanumeric($0)
         }
       }
     }
@@ -156,6 +212,12 @@ extension SemanticVersion {
 
 #if FoundationInit
 extension SemanticVersion: Decodable {
+  
+  /// Initializes a `SemanticVersion` by parsing a version string.
+  ///
+  /// Uses Foundation's regular expression matching.
+  ///
+  /// - Parameter string: A string representing a semantic version (e.g., `"1.2.3"`, `"1.2.3-alpha.1"`, `"1.2.3+build.5"`).
   public init?(_ string: String) {
     self.init(foundation: string)
   }
@@ -174,6 +236,11 @@ extension SemanticVersion: Decodable {
 @available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
 extension SemanticVersion: Decodable {
   
+  /// Initializes a `SemanticVersion` by parsing a version string.
+  ///
+  /// Uses Swift's regex literal matching.
+  ///
+  /// - Parameter string: A string representing a semantic version (e.g., `"1.2.3"`, `"1.2.3-alpha.1"`, `"1.2.3+build.5"`).
   public init?(_ string: String) {
     self.init(stringProcessing: string)
   }
