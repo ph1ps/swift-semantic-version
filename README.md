@@ -85,8 +85,8 @@ To configure which parsing backend is used, specify traits in your `Package.swif
 
 ### Choosing the Parsing Backend
 
-- **FoundationInit** provides faster parsing performance but increases binary size due to linking Foundation, and is generally recommended for Darwin platforms (macOS, iOS).
-- **StringProcessingInit** keeps binaries smaller by avoiding Foundation, making it preferred for portable deployments with stricter binary size constraints (e.g., Linux `musl`, Android).
+- **FoundationInit** provides faster parsing performance but increases binary size due to linking Foundation, and is recommended for Darwin platforms (macOS, iOS).
+- **StringProcessingInit** keeps binaries smaller by avoiding Foundation and enables pure Swift parsing, making it preferred for portable deployments with stricter binary size constraints (e.g., Linux `musl`, Android).
 
 ## Benchmarks
 
