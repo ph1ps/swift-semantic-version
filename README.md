@@ -15,7 +15,7 @@ It offers a structured `SemanticVersion` type for representing versions with:
 
 Parsing, comparison, and validation are fully compliant with the [Semantic Versioning 2.0.0 specification](https://semver.org/).
 
-## Runtime Parsing
+### Runtime Parsing
 
 You can parse a version string at runtime using the failable initializer:
 
@@ -29,7 +29,7 @@ if let version = SemanticVersion(versionString) {
 
 If the string is not a valid semantic version, the initializer will return `nil`.
 
-## Compile-Time Parsing
+### Compile-Time Parsing
 
 This library also provides a macro for compile-time safe parsing of semantic versions:
 
@@ -59,7 +59,7 @@ To use the macro:
 import SemanticVersionMacro
 ```
 
-## Package Traits
+### Package Traits
 
 This library uses Swift 6.1’s **package traits** feature to offer two selectable parsing backends:
 
@@ -83,7 +83,7 @@ To configure which parsing backend is used, specify traits in your `Package.swif
 )
 ```
 
-### Choosing the Parsing Backend
+#### Choosing the Parsing Backend
 
 - **FoundationInit** provides faster parsing performance but increases binary size due to linking Foundation, and is recommended for Darwin platforms (macOS, iOS).
 - **StringProcessingInit** keeps binaries smaller by avoiding Foundation and enables pure Swift parsing, making it preferred for portable deployments with stricter binary size constraints (e.g., Linux `musl`, Android).
