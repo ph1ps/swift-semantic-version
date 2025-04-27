@@ -20,10 +20,10 @@ Parsing, comparison, and validation are fully compliant with the [Semantic Versi
 You can parse a version string at runtime using the failable initializer:
 
 ```swift
-if let version = SemanticVersion("1.2.3-alpha.1+build.5") {
-  print(version.major) // 1
-  print(version.minor) // 2
-  print(version.patch) // 3
+if let version = SemanticVersion(versionString) {
+  print(version.major)
+  print(version.minor)
+  print(version.patch)
 }
 ```
 
