@@ -86,8 +86,8 @@ To configure which parsing backend is used, specify traits in your `Package.swif
 - **Performance**: `FoundationInit` generally provides faster parsing performance (see [Benchmarks](#benchmarks)), while `StringProcessingInit` is slightly slower.
 - **Binary Size**: `FoundationInit` has a big impact on binary size for platforms where `Foundation` is statically linked like `Musl`, `Android` or `WASM`. `StringProcessingInit` on the other hand uses a pure Swift Standard Library implementation, which means no impact on binary size.
 - **Availability**: The different traits have different platform availabilities due to their implementation details, which might be important to you, if you want to increase platform coverage
-  - `FoundationInit`: Requires iOS 4.0, macOS 10.7, macCatalyst 13.1, tvOS 9.0, watchOS 2.0, visionOS 1.0
-  - `StringProcessingInit`: Requires iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0
+  - `FoundationInit`: Requires `iOS 4.0`, `macOS 10.7`, `macCatalyst 13.1`, `tvOS 9.0`, `watchOS 2.0`, `visionOS 1.0`
+  - `StringProcessingInit`: Requires `iOS 16.0`, `macOS 13.0`, `macCatalyst 16.0`, `tvOS 16.0`, `watchOS 9.0`, `visionOS 1.0`
 
 ## Benchmarks
 
