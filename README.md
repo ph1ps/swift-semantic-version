@@ -94,10 +94,10 @@ The benchmarks use a set of 30 valid and 40 invalid semantic version strings, ba
 Each benchmark measures the time taken to parse all provided versions repeatedly under scaled iterations.
 
 The following parsing paths were benchmarked:
-- Parsing valid versions with Foundation
-- Parsing invalid versions with Foundation
-- Parsing valid versions with StringProcessing
-- Parsing invalid versions with StringProcessing
+- Parsing invalid versions with `Foundation`
+- Parsing valid versions with `Foundation`
+- Parsing invalid versions with `StringProcessing`
+- Parsing valid versions with `StringProcessing`
 
 **Time (total CPU)**
 | Test                                           | p0  | p25 | p50 | p75 | p90 | p99 | p100 | Samples |
