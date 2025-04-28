@@ -2,6 +2,9 @@
 
 A fast, spec-compliant semantic versioning library for Swift.
 
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fph1ps%2Fswift-semantic-version%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ph1ps/swift-semantic-version)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fph1ps%2Fswift-semantic-version%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/ph1ps/swift-semantic-version)
+
 ## Details
 
 This library provides a lightweight and efficient implementation of [Semantic Versioning 2.0.0](https://semver.org/) in Swift.  
