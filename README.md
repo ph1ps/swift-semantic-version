@@ -76,7 +76,7 @@ To configure which parsing backend is used, specify traits in your `Package.swif
 ```swift
 .package(
   url: "https://github.com/ph1ps/swift-semantic-version",
-  branch: "main",
+  from: <current version>,
   traits: [
     "StringProcessingInit"
   ]
