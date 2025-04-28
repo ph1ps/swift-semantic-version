@@ -1,4 +1,4 @@
-import SemanticVersion
+@_spi(Internal) import SemanticVersion
 import SwiftCompilerPlugin
 import SwiftDiagnostics
 import SwiftSyntax
@@ -16,12 +16,7 @@ public struct SemanticVersionMacro: ExpressionMacro {
     let string: String
     let diagnosticID = MessageID(domain: "SemanticVersionMacro", id: "InvalidVersionDiagnostic")
     let severity = DiagnosticSeverity.error
-    var message: String {
-      """
-      Invalid semantic version string: "\(string)".
-      The input must follow the Semantic Versioning 2.0.0 specification (https://semver.org/).
-      """
-    }
+    var message: String { "Invalid semantic version string: \"\(string)\"" }
   }
   
   public static func expansion(
@@ -41,7 +36,7 @@ public struct SemanticVersionMacro: ExpressionMacro {
     guard let version = SemanticVersion(literalSegment.content.text)
     else { throw DiagnosticsError(diagnostics: [.init(node: node, message: InvalidVersionDiagnostic(string: literalSegment.content.text))]) }
     
-    if let build = version._build {
+    if let build = version.build {
       return "SemanticVersion._unchecked(major: \(raw: version.major), minor: \(raw: version.minor), patch: \(raw: version.patch), prerelease: \(raw: version._prerelease), build: \"\(raw: build)\")"
     } else {
       return "SemanticVersion._unchecked(major: \(raw: version.major), minor: \(raw: version.minor), patch: \(raw: version.patch), prerelease: \(raw: version._prerelease), build: nil)"

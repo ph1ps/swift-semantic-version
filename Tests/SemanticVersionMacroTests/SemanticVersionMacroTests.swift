@@ -63,8 +63,7 @@ struct SemanticVersionMacroTests {
       """
       #SemanticVersion("1")
       ┬────────────────────
-      ╰─ 🛑 Invalid semantic version string: "1".
-      The input must follow the Semantic Versioning 2.0.0 specification (https://semver.org/).
+      ╰─ 🛑 Invalid semantic version string: "1"
       """
     }
   }

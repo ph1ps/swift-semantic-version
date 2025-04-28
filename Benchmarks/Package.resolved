@@ -1,5 +1,5 @@
 {
-  "originHash" : "0e84c6892a615fa0a9aa976336247eb8e395a14ccc0ac0281cbb9254b6e8a80b",
+  "originHash" : "f437c3fbb65a5a7682bbb5f2a41583fa48f4b9ea9d2ca199a073aaebb03a411f",
   "pins" : [
     {
       "identity" : "hdrhistogram-swift",
@@ -53,6 +53,15 @@
       "state" : {
         "revision" : "e0ec0f5f3af6f3e4d5e7a19d2af26b481acb6ba8",
         "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax",
+      "state" : {
+        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "version" : "601.0.1"
       }
     },
     {

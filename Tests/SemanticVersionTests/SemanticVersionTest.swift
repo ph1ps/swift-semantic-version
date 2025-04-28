@@ -38,7 +38,7 @@ import Testing
 )
 @available(iOS 13.0, macOS 10.15, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
 func testValidFoundation(_ pair: (string: String, version: SemanticVersion)) {
-  #expect(SemanticVersion(foundation: pair.string) == pair.version)
+  #expect(SemanticVersion(_foundation: pair.string) == pair.version)
 }
 
 @Test(
@@ -86,7 +86,7 @@ func testValidFoundation(_ pair: (string: String, version: SemanticVersion)) {
 )
 @available(iOS 13.0, macOS 10.15, macCatalyst 13.0, tvOS 13.0, watchOS 6.0, visionOS 1.0, *)
 func testInvalidFoundation(_ string: String) {
-  #expect(SemanticVersion(foundation: string) == nil)
+  #expect(SemanticVersion(_foundation: string) == nil)
 }
 #endif
 
@@ -127,7 +127,7 @@ func testInvalidFoundation(_ string: String) {
 )
 @available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
 func testValidStringProcessing(_ pair: (string: String, version: SemanticVersion)) {
-  #expect(SemanticVersion(stringProcessing: pair.string) == pair.version)
+  #expect(SemanticVersion(_stringProcessing: pair.string) == pair.version)
 }
 
 @Test(
@@ -175,7 +175,7 @@ func testValidStringProcessing(_ pair: (string: String, version: SemanticVersion
 )
 @available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
 func testInvalidStringProcessing(_ string: String) {
-  #expect(SemanticVersion(stringProcessing: string) == nil)
+  #expect(SemanticVersion(_stringProcessing: string) == nil)
 }
 #endif
 

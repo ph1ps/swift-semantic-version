@@ -80,28 +80,28 @@ let benchmarks = { @Sendable in
   Benchmark("Foundation valid") { benchmark in
     for _ in benchmark.scaledIterations {
       for version in validVersions {
-        blackHole(SemanticVersion(foundation: version))
+        blackHole(SemanticVersion(_foundation: version))
       }
     }
   }
   Benchmark("Foundation invalid") { benchmark in
     for _ in benchmark.scaledIterations {
       for version in invalidVersion {
-        blackHole(SemanticVersion(foundation: version))
+        blackHole(SemanticVersion(_foundation: version))
       }
     }
   }
   Benchmark("StringProcessing valid") { benchmark in
     for _ in benchmark.scaledIterations {
       for version in validVersions {
-        blackHole(SemanticVersion(stringProcessing: version))
+        blackHole(SemanticVersion(_stringProcessing: version))
       }
     }
   }
   Benchmark("StringProcessing invalid") { benchmark in
     for _ in benchmark.scaledIterations {
       for version in invalidVersion {
-        blackHole(SemanticVersion(stringProcessing: version))
+        blackHole(SemanticVersion(_stringProcessing: version))
       }
     }
   }
