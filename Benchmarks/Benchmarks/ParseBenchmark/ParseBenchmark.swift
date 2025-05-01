@@ -1,5 +1,6 @@
 import Benchmark
-@_spi(Internal) import SemanticVersion
+import SemanticVersionBackendFoundation
+import SemanticVersionBackendStringProcessing
 
 let validVersions = [
   "0.0.4",
@@ -80,28 +81,28 @@ let benchmarks = { @Sendable in
   Benchmark("Foundation valid") { benchmark in
     for _ in benchmark.scaledIterations {
       for version in validVersions {
-        blackHole(SemanticVersion(_foundation: version))
+        blackHole(parse(foundation: version))
       }
     }
   }
   Benchmark("Foundation invalid") { benchmark in
     for _ in benchmark.scaledIterations {
       for version in invalidVersion {
-        blackHole(SemanticVersion(_foundation: version))
+        blackHole(parse(foundation: version))
       }
     }
   }
   Benchmark("StringProcessing valid") { benchmark in
     for _ in benchmark.scaledIterations {
       for version in validVersions {
-        blackHole(SemanticVersion(_stringProcessing: version))
+        blackHole(parse(stringProcessing: version))
       }
     }
   }
   Benchmark("StringProcessing invalid") { benchmark in
     for _ in benchmark.scaledIterations {
       for version in invalidVersion {
-        blackHole(SemanticVersion(_stringProcessing: version))
+        blackHole(parse(stringProcessing: version))
       }
     }
   }

@@ -23,11 +23,7 @@ Parsing, comparison, and validation are fully compliant with the [Semantic Versi
 You can parse a version string at runtime using the failable initializer:
 
 ```swift
-if let version = SemanticVersion(versionString) {
-  print(version.major)
-  print(version.minor)
-  print(version.patch)
-}
+let version = SemanticVersion(versionString) // Optional<SemanticVersion>
 ```
 
 If the string is not a valid semantic version, the initializer will return `nil`.
@@ -66,8 +62,8 @@ import SemanticVersionMacro
 
 This library uses Swift 6.1’s **package traits** feature to offer two selectable parsing backends:
 
-- `FoundationInit` (default): Uses Foundation's `NSRegularExpression` for parsing.
-- `StringProcessingInit`: Ues Swift's native `Regex` literals for parsing.
+- `FoundationBackend` (default): Uses Foundation's `NSRegularExpression` for parsing.
+- `StringProcessingBackend`: Ues Swift's native `Regex` literals for parsing.
 
 To configure which parsing backend is used, specify traits in your `Package.swift` dependency declaration:
 
@@ -76,22 +72,22 @@ To configure which parsing backend is used, specify traits in your `Package.swif
   url: "https://github.com/ph1ps/swift-semantic-version",
   from: <current version>,
   traits: [
-    "StringProcessingInit"
+    "StringProcessingBackend"
   ]
 )
 ```
 
 #### Choosing the Parsing Backend
 
-- **Performance**: `FoundationInit` generally provides faster parsing performance (see [Benchmarks](#benchmarks)), while `StringProcessingInit` is slightly slower.
-- **Binary Size**: `FoundationInit` has a big impact on binary size for platforms where `Foundation` is statically linked like `Musl`, `Android` or `WASM`. `StringProcessingInit` on the other hand uses a pure Swift Standard Library implementation, which means no impact on binary size.
+- **Performance**: `FoundationBackend` generally provides faster parsing performance (see [Benchmarks](#benchmarks)), while `StringProcessingBackend` is slightly slower.
+- **Binary Size**: `FoundationBackend` has a big impact on binary size for platforms where `Foundation` is statically linked like `Musl`, `Android` or `WASM`. `StringProcessingBackend` on the other hand uses a pure Swift Standard Library implementation, which means no impact on binary size.
 - **Availability**: The different traits have different platform availabilities due to their implementation details, which might be important to you, if you want to increase platform coverage
-  - `FoundationInit`: Requires `iOS 4.0`, `macOS 10.7`, `macCatalyst 13.1`, `tvOS 9.0`, `watchOS 2.0`, `visionOS 1.0`
-  - `StringProcessingInit`: Requires `iOS 16.0`, `macOS 13.0`, `macCatalyst 16.0`, `tvOS 16.0`, `watchOS 9.0`, `visionOS 1.0`
+  - `FoundationBackend`: Requires `iOS 4.0`, `macOS 10.7`, `macCatalyst 13.1`, `tvOS 9.0`, `watchOS 2.0`, `visionOS 1.0`
+  - `StringProcessingBackend`: Requires `iOS 16.0`, `macOS 13.0`, `macCatalyst 16.0`, `tvOS 16.0`, `watchOS 9.0`, `visionOS 1.0`
 
 ## Benchmarks
 
-Performance benchmarks were conducted to compare the two available parsing backends: `FoundationInit` and `StringProcessingInit`.
+Performance benchmarks were conducted to compare the two available parsing backends: `FoundationBackend` and `StringProcessingBackend`.
 
 The benchmarks use a set of 30 valid and 40 invalid semantic version strings, based on a variety of real-world examples and edge cases.  
 Each benchmark measures the time taken to parse all provided versions repeatedly under scaled iterations.

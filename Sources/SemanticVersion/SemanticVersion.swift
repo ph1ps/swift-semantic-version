@@ -1,3 +1,4 @@
+import SemanticVersionBackendCore
 /// A structure representing a [Semantic Versioning 2.0.0](https://semver.org/) version number.
 ///
 /// # Overview
@@ -12,18 +13,6 @@
 ///
 /// Parsing, comparison, and validation are fully compliant with the [Semantic Versioning 2.0.0](https://semver.org/) specification.
 public struct SemanticVersion: Sendable, Equatable, Comparable, Hashable, Encodable {
-  
-  public enum _Prerelease: Sendable, Equatable, Hashable {
-    case alphanumeric(String)
-    case numeric(UInt)
-    
-    var description: String {
-      switch self {
-      case .alphanumeric(let string): string
-      case .numeric(let integer): String(integer)
-      }
-    }
-  }
   
   /// The major version component.
   ///
@@ -53,11 +42,15 @@ public struct SemanticVersion: Sendable, Equatable, Comparable, Hashable, Encoda
   /// - For `1.2.3-alpha.1`, `prerelease` is `["alpha", "1"]`.
   /// - For `1.2.3`, `prerelease` is an empty array.
   public var prerelease: [String] {
-    _prerelease.map { $0.description }
+    _prerelease.map {
+      switch $0 {
+      case .alphanumeric(let string): string
+      case .numeric(let integer): String(integer)
+      }
+    }
   }
   
-  @_spi(Internal)
-  public let _prerelease: [_Prerelease]
+  let _prerelease: [_Prerelease]
   
   init(major: UInt, minor: UInt, patch: UInt, prerelease: [_Prerelease], build: String?) {
     self.major = major
@@ -79,7 +72,7 @@ public struct SemanticVersion: Sendable, Equatable, Comparable, Hashable, Encoda
   public var description: String {
     var description = "\(major).\(minor).\(patch)"
     if !_prerelease.isEmpty {
-      description += "-\(_prerelease.map { $0.description }.joined(separator: "."))"
+      description += "-\(prerelease.joined(separator: "."))"
     }
     if let build {
       description += "+\(build)"
@@ -131,109 +124,8 @@ public struct SemanticVersion: Sendable, Equatable, Comparable, Hashable, Encoda
   }
 }
 
-#if FoundationInit
-import Foundation
-
-let foundationRegex = try? NSRegularExpression(pattern: #"^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"#)
-
-extension SemanticVersion {
-  
-  @_spi(Internal)
-  public init?(_foundation string: String) {
-    
-    guard
-      let foundationRegex,
-      let match = foundationRegex.firstMatch(in: string, range: .init(string.startIndex..., in: string)),
-      let majorRange = Range(match.range(at: 1), in: string),
-      let minorRange = Range(match.range(at: 2), in: string),
-      let patchRange = Range(match.range(at: 3), in: string),
-      let major = UInt(string[majorRange]),
-      let minor = UInt(string[minorRange]),
-      let patch = UInt(string[patchRange])
-    else { return nil }
-    
-    var prerelease: [_Prerelease] = []
-    if let prereleaseRange = Range(match.range(at: 4), in: string) {
-      var currentStart = prereleaseRange.lowerBound
-      var currentIndex = currentStart
-      while currentIndex < prereleaseRange.upperBound {
-        if string[currentIndex] == "." {
-          let part = string[currentStart..<currentIndex]
-          if let number = UInt(part) {
-            prerelease.append(.numeric(number))
-          } else {
-            prerelease.append(.alphanumeric(String(part)))
-          }
-          currentStart = string.index(after: currentIndex)
-        }
-        currentIndex = string.index(after: currentIndex)
-      }
-      if currentStart < prereleaseRange.upperBound {
-        let part = string[currentStart..<prereleaseRange.upperBound]
-        if let number = UInt(part) {
-          prerelease.append(.numeric(number))
-        } else {
-          prerelease.append(.alphanumeric(String(part)))
-        }
-      }
-    }
-    
-    let build = Range(match.range(at: 5), in: string).map { String(string[$0]) }
-    self = .init(major: major, minor: minor, patch: patch, prerelease: prerelease, build: build)
-  }
-}
-#endif
-
-#if StringProcessingInit
-@available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
-nonisolated(unsafe) let stringProcessingRegex = /^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
-
-@available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
-extension SemanticVersion {
-  
-  @_spi(Internal)
-  public init?(_stringProcessing string: String) {
-    
-    guard
-      let match = try? stringProcessingRegex.firstMatch(in: string),
-      let major = UInt(match.output.major),
-      let minor = UInt(match.output.minor),
-      let patch = UInt(match.output.patch)
-    else { return nil }
-    
-    var prerelease: [_Prerelease] = []
-    if let prereleaseOutput = match.output.prerelease {
-      var currentStart = prereleaseOutput.startIndex
-      var currentIndex = currentStart
-      while currentIndex < prereleaseOutput.endIndex {
-        if prereleaseOutput[currentIndex] == "." {
-          let part = prereleaseOutput[currentStart..<currentIndex]
-          if let number = UInt(part) {
-            prerelease.append(.numeric(number))
-          } else {
-            prerelease.append(.alphanumeric(String(part)))
-          }
-          currentStart = prereleaseOutput.index(after: currentIndex)
-        }
-        currentIndex = prereleaseOutput.index(after: currentIndex)
-      }
-      if currentStart < prereleaseOutput.endIndex {
-        let part = prereleaseOutput[currentStart..<prereleaseOutput.endIndex]
-        if let number = UInt(part) {
-          prerelease.append(.numeric(number))
-        } else {
-          prerelease.append(.alphanumeric(String(part)))
-        }
-      }
-    }
-    
-    let build = match.output.buildmetadata.map { String($0) }
-    self = .init(major: major, minor: minor, patch: patch, prerelease: prerelease, build: build)
-  }
-}
-#endif
-
-#if FoundationInit
+#if FoundationBackend
+import SemanticVersionBackendFoundation
 extension SemanticVersion: Decodable {
   
   /// Initializes a `SemanticVersion` by parsing a version string.
@@ -242,7 +134,11 @@ extension SemanticVersion: Decodable {
   ///
   /// - Parameter string: A string representing a semantic version (e.g., `"1.2.3"`, `"1.2.3-alpha.1"`, `"1.2.3+build.5"`).
   public init?(_ string: String) {
-    self.init(_foundation: string)
+    if let result = parse(foundation: string) {
+      self = .init(major: result.0, minor: result.1, patch: result.2, prerelease: result.3, build: result.4)
+    } else {
+      return nil
+    }
   }
   
   public init(from decoder: any Decoder) throws {
@@ -255,7 +151,8 @@ extension SemanticVersion: Decodable {
     }
   }
 }
-#elseif StringProcessingInit
+#elseif StringProcessingBackend
+import SemanticVersionBackendStringProcessing
 @available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
 extension SemanticVersion: Decodable {
   
@@ -265,7 +162,11 @@ extension SemanticVersion: Decodable {
   ///
   /// - Parameter string: A string representing a semantic version (e.g., `"1.2.3"`, `"1.2.3-alpha.1"`, `"1.2.3+build.5"`).
   public init?(_ string: String) {
-    self.init(_stringProcessing: string)
+    if let result = parse(stringProcessing: string) {
+      self = .init(major: result.0, minor: result.1, patch: result.2, prerelease: result.3, build: result.4)
+    } else {
+      return nil
+    }
   }
   
   public init(from decoder: any Decoder) throws {
