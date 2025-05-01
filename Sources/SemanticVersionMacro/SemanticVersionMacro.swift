@@ -1,4 +1,4 @@
-import SemanticVersion
+@_exported import SemanticVersion
 
 /// A freestanding macro that parses a semantic version string at compile time.
 ///

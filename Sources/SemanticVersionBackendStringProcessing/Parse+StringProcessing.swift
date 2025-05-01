@@ -4,7 +4,7 @@ import SemanticVersionBackendCore
 nonisolated(unsafe) let stringProcessingRegex = /^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/
 
 @available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
-public func parse(stringProcessing string: String) -> (UInt, UInt, UInt, [_Prerelease], String?)? {
+package func parse(stringProcessing string: String) -> (UInt, UInt, UInt, [_Prerelease], String?)? {
   guard
     let match = try? stringProcessingRegex.firstMatch(in: string),
     let major = UInt(match.output.major),
