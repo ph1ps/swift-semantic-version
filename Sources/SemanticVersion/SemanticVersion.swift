@@ -1,4 +1,4 @@
-import SemanticVersionBackendCore
+import _SemanticVersionBackendCore
 /// A structure representing a [Semantic Versioning 2.0.0](https://semver.org/) version number.
 ///
 /// # Overview
@@ -125,7 +125,7 @@ public struct SemanticVersion: Sendable, Equatable, Comparable, Hashable, Encoda
 }
 
 #if FoundationBackend
-import SemanticVersionBackendFoundation
+@_spi(Internal) import _SemanticVersionBackendFoundation
 
 extension SemanticVersion: Decodable {
   /// Initializes a `SemanticVersion` by parsing a version string.
@@ -152,7 +152,7 @@ extension SemanticVersion: Decodable {
   }
 }
 #elseif StringProcessingBackend
-import SemanticVersionBackendStringProcessing
+@_spi(Internal) import _SemanticVersionBackendStringProcessing
 
 @available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, visionOS 1.0, *)
 extension SemanticVersion: Decodable {

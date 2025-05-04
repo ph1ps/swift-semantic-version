@@ -1,4 +1,4 @@
-import SemanticVersionBackendFoundation
+@_spi(Internal) import _SemanticVersionBackendFoundation
 import SwiftCompilerPlugin
 import SwiftDiagnostics
 import SwiftSyntax

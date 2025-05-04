@@ -1,9 +1,9 @@
+import _SemanticVersionBackendCore
 import Foundation
-import SemanticVersionBackendCore
 
 let foundationRegex = try? NSRegularExpression(pattern: #"^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"#)
 
-package func parse(foundation string: String) -> (UInt, UInt, UInt, [_Prerelease], String?)? {
+@_spi(Internal) public func parse(foundation string: String) -> (UInt, UInt, UInt, [_Prerelease], String?)? {
   guard
     let foundationRegex,
     let match = foundationRegex.firstMatch(in: string, range: .init(string.startIndex..., in: string)),

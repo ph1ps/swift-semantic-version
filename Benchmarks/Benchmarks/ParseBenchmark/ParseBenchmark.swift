@@ -1,6 +1,6 @@
+@_spi(Internal) import _SemanticVersionBackendFoundation
+@_spi(Internal) import _SemanticVersionBackendStringProcessing
 import Benchmark
-import SemanticVersionBackendFoundation
-import SemanticVersionBackendStringProcessing
 
 let validVersions = [
   "0.0.4",

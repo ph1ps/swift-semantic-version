@@ -1,9 +1,9 @@
+import _SemanticVersionBackendCore
+@_spi(Internal) import _SemanticVersionBackendFoundation
+@_spi(Internal) import _SemanticVersionBackendStringProcessing
 import Foundation
-import Testing
 @testable import SemanticVersion
-import SemanticVersionBackendCore
-import SemanticVersionBackendFoundation
-import SemanticVersionBackendStringProcessing
+import Testing
 
 extension SemanticVersion {
   init?(unmapped: (UInt, UInt, UInt, [_Prerelease], String?)?) {

@@ -4,14 +4,7 @@ import PackageDescription
 
 let package = Package(
   name: "swift-semantic-version",
-  platforms: [
-    .iOS(.v13),
-    .macOS(.v10_15),
-    .macCatalyst(.v13),
-    .tvOS(.v13),
-    .watchOS(.v6),
-    .visionOS(.v1)
-  ],
+  platforms: [.macOS(.v10_15)],
   products: [
     .library(name: "SemanticVersion", targets: ["SemanticVersion"]),
     .library(name: "SemanticVersionMacro", targets: ["SemanticVersionMacro"])
@@ -29,21 +22,21 @@ let package = Package(
     .target(
       name: "SemanticVersion",
       dependencies: [
-        "SemanticVersionBackendCore",
-        .target(name: "SemanticVersionBackendFoundation", condition: .when(traits: ["FoundationBackend"])),
-        .target(name: "SemanticVersionBackendStringProcessing", condition: .when(traits: ["StringProcessingBackend"]))
+        "_SemanticVersionBackendCore",
+        .target(name: "_SemanticVersionBackendFoundation", condition: .when(traits: ["FoundationBackend"])),
+        .target(name: "_SemanticVersionBackendStringProcessing", condition: .when(traits: ["StringProcessingBackend"]))
       ]
     ),
     .target(
-      name: "SemanticVersionBackendCore"
+      name: "_SemanticVersionBackendCore"
     ),
     .target(
-      name: "SemanticVersionBackendFoundation",
-      dependencies: ["SemanticVersionBackendCore"]
+      name: "_SemanticVersionBackendFoundation",
+      dependencies: ["_SemanticVersionBackendCore"]
     ),
     .target(
-      name: "SemanticVersionBackendStringProcessing",
-      dependencies: ["SemanticVersionBackendCore"]
+      name: "_SemanticVersionBackendStringProcessing",
+      dependencies: ["_SemanticVersionBackendCore"]
     ),
     .target(
       name: "SemanticVersionMacro",
@@ -55,7 +48,7 @@ let package = Package(
     .macro(
       name: "SemanticVersionMacroPlugin",
       dependencies: [
-        "SemanticVersionBackendFoundation",
+        "_SemanticVersionBackendFoundation",
         .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
         .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
       ]
@@ -63,9 +56,9 @@ let package = Package(
     .testTarget(
       name: "SemanticVersionTests",
       dependencies: [
+        "_SemanticVersionBackendFoundation",
+        "_SemanticVersionBackendStringProcessing",
         "SemanticVersion",
-        "SemanticVersionBackendFoundation",
-        "SemanticVersionBackendStringProcessing",
         "SemanticVersionMacro",
         "SemanticVersionMacroPlugin",
         .product(name: "MacroTesting", package: "swift-macro-testing")
