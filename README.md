@@ -23,7 +23,7 @@ Parsing, comparison, and validation are fully compliant with the [Semantic Versi
 You can parse a version string at runtime using the failable initializer:
 
 ```swift
-let version = SemanticVersion(versionString) // Optional<SemanticVersion>
+let version = SemanticVersion(versionString) // -> Optional<SemanticVersion>
 ```
 
 If the string is not a valid semantic version, the initializer will return `nil`.
@@ -33,7 +33,7 @@ If the string is not a valid semantic version, the initializer will return `nil`
 This library also provides a macro for compile-time safe parsing of semantic versions:
 
 ```swift
-let version = #SemanticVersion("1.2.3-alpha.1+build.5")
+let version = #SemanticVersion("1.2.3-alpha.1+build.5") // -> SemanticVersion
 ```
 
 If the provided string is invalid, a compile-time error will be produced.  
