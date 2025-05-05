@@ -1,4 +1,4 @@
-import _SemanticVersionBackendCore
+@_exported import _SemanticVersionBackendCore
 /// A structure representing a [Semantic Versioning 2.0.0](https://semver.org/) version number.
 ///
 /// # Overview
@@ -85,7 +85,11 @@ public struct SemanticVersion: Sendable, Equatable, Comparable, Hashable, Encoda
     try container.encode(description)
   }
   
-  public static func <(lhs: SemanticVersion, rhs: SemanticVersion) -> Bool {
+  public static func ==(lhs: Self, rhs: Self) -> Bool {
+    return lhs.major == rhs.major && lhs.minor == rhs.minor && lhs.patch == rhs.patch && lhs._prerelease.elementsEqual(rhs._prerelease)
+  }
+  
+  public static func <(lhs: Self, rhs: Self) -> Bool {
     
     guard lhs.major == rhs.major
     else { return lhs.major < rhs.major }

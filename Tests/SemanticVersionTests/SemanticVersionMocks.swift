@@ -76,6 +76,39 @@ extension [String] {
     "9.8.7+meta+meta",
     "9.8.7-whatever+meta+meta"
   ]
+  
+  static let expandedVersions = [
+    #"major: 0, minor: 0, patch: 4, prerelease: [], build: nil"#,
+    #"major: 1, minor: 2, patch: 3, prerelease: [], build: nil"#,
+    #"major: 10, minor: 20, patch: 30, prerelease: [], build: nil"#,
+    #"major: 1, minor: 1, patch: 2, prerelease: [_Prerelease.alphanumeric("prerelease")], build: "meta""#,
+    #"major: 1, minor: 1, patch: 2, prerelease: [], build: "meta""#,
+    #"major: 1, minor: 1, patch: 2, prerelease: [], build: "meta-valid""#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("alpha")], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("beta")], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("alpha"), _Prerelease.alphanumeric("beta")], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("alpha"), _Prerelease.alphanumeric("beta"), _Prerelease.numeric(1)], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("alpha"), _Prerelease.numeric(1)], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("alpha0"), _Prerelease.alphanumeric("valid")], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("alpha"), _Prerelease.alphanumeric("0valid")], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("alpha-a"), _Prerelease.alphanumeric("b-c-somethinglong")], build: "build.1-aef.1-its-okay""#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("rc"), _Prerelease.numeric(1)], build: "build.1""#,
+    #"major: 2, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("rc"), _Prerelease.numeric(1)], build: "build.123""#,
+    #"major: 1, minor: 2, patch: 3, prerelease: [_Prerelease.alphanumeric("beta")], build: nil"#,
+    #"major: 10, minor: 2, patch: 3, prerelease: [_Prerelease.alphanumeric("DEV-SNAPSHOT")], build: nil"#,
+    #"major: 1, minor: 2, patch: 3, prerelease: [_Prerelease.alphanumeric("SNAPSHOT-123")], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [], build: nil"#,
+    #"major: 2, minor: 0, patch: 0, prerelease: [], build: nil"#,
+    #"major: 1, minor: 1, patch: 7, prerelease: [], build: nil"#,
+    #"major: 2, minor: 0, patch: 0, prerelease: [], build: "build.1848""#,
+    #"major: 2, minor: 0, patch: 1, prerelease: [_Prerelease.alphanumeric("alpha"), _Prerelease.numeric(1227)], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("alpha")], build: "beta""#,
+    #"major: 1, minor: 2, patch: 3, prerelease: [_Prerelease.alphanumeric("---RC-SNAPSHOT"), _Prerelease.numeric(12), _Prerelease.numeric(9), _Prerelease.alphanumeric("1--"), _Prerelease.numeric(12)], build: "788""#,
+    #"major: 1, minor: 2, patch: 3, prerelease: [_Prerelease.alphanumeric("---R-S"), _Prerelease.numeric(12), _Prerelease.numeric(9), _Prerelease.alphanumeric("1--"), _Prerelease.numeric(12)], build: "meta""#,
+    #"major: 1, minor: 2, patch: 3, prerelease: [_Prerelease.alphanumeric("---RC-SNAPSHOT"), _Prerelease.numeric(12), _Prerelease.numeric(9), _Prerelease.alphanumeric("1--"), _Prerelease.numeric(12)], build: nil"#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [], build: "0.build.1-rc.10000aaa-kk-0.1""#,
+    #"major: 1, minor: 0, patch: 0, prerelease: [_Prerelease.alphanumeric("0A"), _Prerelease.alphanumeric("is"), _Prerelease.alphanumeric("legal")], build: nil"#
+  ]
 }
 
 extension [SemanticVersion] {

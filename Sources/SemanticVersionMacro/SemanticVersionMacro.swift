@@ -1,5 +1,4 @@
 @_exported import SemanticVersion
-
 /// A freestanding macro that parses a semantic version string at compile time.
 ///
 /// Use `SemanticVersion` to embed a semantic version directly into your code as a value.
