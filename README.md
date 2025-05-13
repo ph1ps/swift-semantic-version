@@ -58,7 +58,7 @@ To use the macro:
 import SemanticVersionMacro
 ```
 
-### Package Traits
+## Package Traits
 
 This library uses Swift 6.1’s **package traits** feature to offer two selectable parsing backends:
 
@@ -77,31 +77,43 @@ To configure which parsing backend is used, specify traits in your `Package.swif
 )
 ```
 
-#### Choosing the parsing backend
+### Choosing the parsing backend
 
-- **Performance**: `FoundationBackend` generally provides faster parsing performance (see [Benchmarks](#benchmarks)), while `StringProcessingBackend` is slightly slower.
-- **Binary Size**: `FoundationBackend` has a big impact on binary size for platforms where `Foundation` is statically linked like `Musl`, `Android` or `WASM`. `StringProcessingBackend` on the other hand uses a pure Swift Standard Library implementation, which means no impact on binary size.
-- **Availability**: The different traits have different platform availabilities due to their implementation details, which might be important to you, if you want to increase platform coverage
-  - `FoundationBackend`: Requires `iOS 8.0`, `iPadOS 8.0`, `macOS 10.15`, `macCatalyst 13.1`, `tvOS 9.0`, `watchOS 2.0`, `visionOS 1.0`
-  - `StringProcessingBackend`: Requires `iOS 16.0`, `iPadOS 16.0`, `macOS 13.0`, `macCatalyst 16.0`, `tvOS 16.0`, `watchOS 9.0`, `visionOS 1.0`
+#### Performance
+`FoundationBackend` generally provides faster parsing performance, while `StringProcessingBackend` is slightly slower.
 
-## Benchmarks
+|                                                       | p0  | p25 | p50 | p75 | p90 | p99 | p100 | Samples |
+|-------------------------------------------------------|-----|-----|-----|-----|-----|-----|------|---------|
+| ParseBenchmark:FoundationBackend invalid (μs)         |  56 |  57 |  57 |  57 |  58 |  69 |  234 |   9653  |
+| ParseBenchmark:FoundationBackend valid (μs)           | 100 | 104 | 105 | 106 | 110 | 131 |  385 |   6415  |
+| ParseBenchmark:StringProcessingBackend invalid (μs)   | 162 | 164 | 164 | 165 | 166 | 186 |  364 |   4685  |
+| ParseBenchmark:StringProcessingBackend valid (μs)     |1219 |1227 |1231 |1237 |1246 |1401 | 2038 |    774  |
 
-Performance benchmarks were conducted to compare the two available parsing backends: `FoundationBackend` and `StringProcessingBackend`.
+<details>
+<summary>Details</summary>
+The benchmarks use a set of 30 valid and 40 invalid semantic version strings, based on a variety of real-world examples and edge cases. Each benchmark measures the time taken to parse all provided versions repeatedly under scaled iterations.
+</details>
 
-The benchmarks use a set of 30 valid and 40 invalid semantic version strings, based on a variety of real-world examples and edge cases.  
-Each benchmark measures the time taken to parse all provided versions repeatedly under scaled iterations.
+#### Binary size
+`FoundationBackend` has a big impact on binary size for platforms where `Foundation` is statically linked like `Musl` or `WASM`. `StringProcessingBackend` on the other hand uses a pure Swift Standard Library implementation, which means no impact on binary size.
 
-The following parsing paths were benchmarked:
-- Parsing invalid versions with `Foundation`
-- Parsing valid versions with `Foundation`
-- Parsing invalid versions with `StringProcessing`
-- Parsing valid versions with `StringProcessing`
+|                              | Musl | WASM   |
+|------------------------------|------|--------|
+| FoundationBackend (MB)       |     ?|    58.3|
+| StringProcessingBackend (MB) |     ?|     9.3|
 
-**Time (total CPU)**
-| Test                                           | p0  | p25 | p50 | p75 | p90 | p99 | p100 | Samples |
-|------------------------------------------------|-----|-----|-----|-----|-----|-----|------|---------|
-| InitBenchmark:Foundation invalid (μs) *        |  56 |  57 |  57 |  57 |  58 |  69 |  234 |   9653  |
-| InitBenchmark:Foundation valid (μs) *          | 100 | 104 | 105 | 106 | 110 | 131 |  385 |   6415  |
-| InitBenchmark:StringProcessing invalid (μs) *  | 162 | 164 | 164 | 165 | 166 | 186 |  364 |   4685  |
-| InitBenchmark:StringProcessing valid (μs) *    |1219 |1227 |1231 |1237 |1246 |1401 | 2038 |    774  |
+<details>
+<summary>Details</summary>
+The binary size was measured by building an executable target simply that instantiates a `SemanticVersion`. The bytes of the resulting binary were taken.
+
+- `swift build --swift-sdk wasm32-unknown-wasi`
+- `swift build --swift-sdk x86_64-swift-linux-musl`
+</details>
+
+#### Availability
+The different traits have different platform availabilities due to their implementation details, which might be important to you, if you want to increase platform coverage.
+
+|                         | iOS | iPadOS | macOS | macCatalyst | tvOS | watchOS | visionOS |
+|-------------------------|-----|--------|-------|-------------|------|---------|----------|
+| FoundationBackend       |  8.0|     8.0|  10.15|         13.1|   9.0|      2.0|       1.0|
+| StringProcessingBackend | 16.0|    16.0|   13.0|         16.0|  16.0|      9.0|       1.0|
