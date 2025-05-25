@@ -84,10 +84,10 @@ To configure which parsing backend is used, specify traits in your `Package.swif
 
 |                                                       | p0  | p25 | p50 | p75 | p90 | p99 | p100 | Samples |
 |-------------------------------------------------------|-----|-----|-----|-----|-----|-----|------|---------|
-| ParseBenchmark:FoundationBackend invalid (μs)         |  56 |  57 |  57 |  57 |  58 |  69 |  234 |   9653  |
-| ParseBenchmark:FoundationBackend valid (μs)           | 100 | 104 | 105 | 106 | 110 | 131 |  385 |   6415  |
-| ParseBenchmark:StringProcessingBackend invalid (μs)   | 162 | 164 | 164 | 165 | 166 | 186 |  364 |   4685  |
-| ParseBenchmark:StringProcessingBackend valid (μs)     |1219 |1227 |1231 |1237 |1246 |1401 | 2038 |    774  |
+| FoundationBackend invalid (μs)         |  56 |  57 |  57 |  57 |  58 |  69 |  234 |   9653  |
+| FoundationBackend valid (μs)           | 100 | 104 | 105 | 106 | 110 | 131 |  385 |   6415  |
+| StringProcessingBackend invalid (μs)   | 162 | 164 | 164 | 165 | 166 | 186 |  364 |   4685  |
+| StringProcessingBackend valid (μs)     |1219 |1227 |1231 |1237 |1246 |1401 | 2038 |    774  |
 
 <details>
 <summary>Details</summary>
@@ -95,16 +95,16 @@ The benchmarks use a set of 30 valid and 40 invalid semantic version strings, ba
 </details>
 
 #### Binary size
-`FoundationBackend` has a big impact on binary size for platforms where `Foundation` is statically linked like `Musl` or `WASM`. `StringProcessingBackend` on the other hand uses a pure Swift Standard Library implementation, which means no impact on binary size.
+`FoundationBackend` has a big impact on binary size for platforms where `Foundation` is statically linked like `Musl` or `Wasm`. `StringProcessingBackend` on the other hand uses a pure Swift Standard Library implementation, which means no impact on binary size.
 
-|                              | Musl | WASM   |
+|                              | Musl | Wasm   |
 |------------------------------|------|--------|
 | FoundationBackend (MB)       |     ?|    58.3|
 | StringProcessingBackend (MB) |     ?|     9.3|
 
 <details>
 <summary>Details</summary>
-The binary size was measured by building an executable target simply that instantiates a `SemanticVersion`. The bytes of the resulting binary were taken.
+The binary size was measured by building an executable target simply that instantiates a SemanticVersion. The bytes of the resulting binary were taken.
 
 - `swift build --swift-sdk wasm32-unknown-wasi`
 - `swift build --swift-sdk x86_64-swift-linux-musl`
