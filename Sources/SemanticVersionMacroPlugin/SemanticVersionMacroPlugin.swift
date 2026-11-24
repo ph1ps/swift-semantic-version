@@ -1,4 +1,3 @@
-@_spi(Internal) import _SemanticVersionBackendFoundation
 import SwiftCompilerPlugin
 import SwiftDiagnostics
 import SwiftSyntax

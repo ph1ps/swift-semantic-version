@@ -48,10 +48,10 @@ let package = Package(
     .macro(
       name: "SemanticVersionMacroPlugin",
       dependencies: [
-        "_SemanticVersionBackendFoundation",
         .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
         .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
-      ]
+      ],
+      swiftSettings: [.define("SEMANTIC_VERSION_MACRO_PLUGIN")]
     ),
     .testTarget(
       name: "SemanticVersionTests",
