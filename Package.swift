@@ -15,7 +15,7 @@ let package = Package(
     .default(enabledTraits: ["FoundationBackend"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/swiftlang/swift-syntax", "509.0.0"..<"602.0.0"),
+    .package(url: "https://github.com/swiftlang/swift-syntax", "509.0.0"..<"605.0.0"),
     .package(url: "https://github.com/pointfreeco/swift-macro-testing", from: "0.6.2")
   ],
   targets: [
